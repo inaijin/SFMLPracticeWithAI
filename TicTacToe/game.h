@@ -13,6 +13,7 @@ class Game {
 public:
     Game();
     void run();
+    int checkWin();
 
 private:
     // Game constants
@@ -43,7 +44,6 @@ private:
     int detectZone(bool isWidth, int currentPos);
     void placeXorO(int row, int col);
     void drawBoardElements();
-    int checkWin();
     void checkAndSetWinText();
 };
 

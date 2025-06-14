@@ -1,3 +1,4 @@
+#include "ai.h"
 #include "game.h"
 
 const float Game::LINE_THICKNESS = 3.0f;
