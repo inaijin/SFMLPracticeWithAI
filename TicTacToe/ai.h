@@ -22,16 +22,15 @@ public:
     AI(int aiSymbol, int playerSymbol, std::string difficulty, Game* gameInstance);
 
     void setDifficulty(std::string newDifficulty);
-    std::pair<int, int> getMove(Board board);
+    std::pair<int, int> getMove(Board& board);
 
 private:
-    std::pair<int, int> getRandomMove(Board board);
-    std::pair<int, int> getMediumMove(Board board);
-    std::pair<int, int> getBestMove(Board board, int depth = std::numeric_limits<int>::max());
+    std::pair<int, int> getRandomMove(Board& board);
+    std::pair<int, int> getBestMove(Board& board, int depth = std::numeric_limits<int>::max());
 
-    int minimax(Board board, int depth, bool isMaximizing);
+    int minimax(Board& board, int depth, int alpha, int beta, bool isMaximizing);
 
-    bool isBoardFull(Board board);
+    bool isBoardFull(const Board& board);
 };
 
 #endif // AI_H
