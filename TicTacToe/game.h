@@ -9,6 +9,10 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 
+class AI;
+
+#include "ai.h"
+
 class Game {
 public:
     Game();
@@ -24,12 +28,34 @@ private:
     // SFML and game state members
     sf::RenderWindow window;
     sf::Font font;
-    sf::Text winText;
-    sf::Text instructionText;
     std::vector<sf::RectangleShape> gridLines;
     std::vector<std::vector<int>> boardStatus;
     int turn;
     bool gameOver;
+
+    enum class GameState { MainMenu, DifficultyMenu, Playing, GameOver };
+    enum class GameMode { TwoPlayer, VsAI };
+
+    GameState gameState;
+    GameMode gameMode;
+    std::unique_ptr<AI> aiPlayer;
+
+    sf::Text titleText;
+    sf::Text twoPlayerButton;
+    sf::Text vsAiButton;
+    sf::Text easyButton;
+    sf::Text mediumButton;
+    sf::Text hardButton;
+
+    void processMainMenuEvents(const std::optional<sf::Event>& event);
+    void processDifficultyMenuEvents(const std::optional<sf::Event>& event);
+    void processPlayingEvents(const std::optional<sf::Event>& event);
+    void renderMainMenu();
+    void renderDifficultyMenu();
+    void renderPlaying();
+
+    sf::Text winText;
+    sf::Text instructionText;
 
     // Core methods
     void processEvents();
@@ -45,6 +71,7 @@ private:
     void placeXorO(int row, int col);
     void drawBoardElements();
     void checkAndSetWinText();
+    void resetGame();
 };
 
 #endif // GAME_H

@@ -7,6 +7,8 @@
 
 #include "game.h"
 
+class Game;
+
 typedef std::vector<std::vector<int>> Board;
 
 class AI {
