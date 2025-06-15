@@ -7,11 +7,11 @@ Ghost::Ghost(std::vector<float> dimensions, std::vector<float> initPosition, sf:
 }
 
 void Ghost::update(std::vector<std::vector<Tile>> map) {
-    randomMovement();
+    move();
     handleColition(map);
 }
 
-void Ghost::randomMovement() {
+void Ghost::move() {
     static sf::Clock clock;
     static float changeDirectionInterval = 0.5f;
     if (clock.getElapsedTime().asSeconds() > changeDirectionInterval) {

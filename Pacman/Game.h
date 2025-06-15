@@ -8,6 +8,10 @@
 #include "Grid.h"
 #include "Tile.h"
 #include "Ghost.h"
+#include "Blinky.h"
+#include "Pinky.h"
+#include "Inky.h"
+#include "Clyde.h"
 #include "Pacman.h"
 
 class Game {
@@ -19,10 +23,7 @@ public:
 private:
     sf::RenderWindow window;
     Pacman pacman;
-    Ghost redGhost;
-    Ghost blueGhost;
-    Ghost pinkGhost;
-    Ghost orangeGhost;
+    std::vector<Ghost*> ghosts;
     Grid grid;
     std::vector<std::vector<Tile>> map;
     void loadMap();

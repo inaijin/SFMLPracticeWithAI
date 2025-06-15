@@ -9,13 +9,13 @@ const float TILE_SIZE = 30.0f;
 
 Game::Game()
 : window(sf::VideoMode({SCREEN_WIDTH, SCREEN_HEIGHT}), "Pacman"),
-pacman(pacman_diemensions, {85, 100}),
-redGhost(ghost_diemensions, {245, 195}, sf::Color::Red),
-blueGhost(ghost_diemensions, {1333, 195}, sf::Color::Blue),
-pinkGhost(ghost_diemensions, {85, 905}, sf::Color::Magenta),
-orangeGhost(ghost_diemensions, {1500, 905}, sf::Color(255, 165, 0)) {
+pacman(pacman_diemensions, {85, 100}) {
     window.setFramerateLimit(framePS);
     loadMap();
+    ghosts.push_back(new Blinky(ghost_diemensions, {245, 195}, sf::Color::Red));
+    ghosts.push_back(new Pinky(ghost_diemensions, {1333, 195}, sf::Color::Magenta));
+    ghosts.push_back(new Inky(ghost_diemensions, {85, 905}, sf::Color::Cyan));
+    ghosts.push_back(new Clyde(ghost_diemensions, {1500, 905}, sf::Color(255, 165, 0)));
 }
 
 Game::~Game() {
@@ -33,10 +33,8 @@ void Game::run() {
         // --- Update game logic here ---
 
         pacman.update(map);
-        redGhost.update(map);
-        blueGhost.update(map);
-        pinkGhost.update(map);
-        orangeGhost.update(map);
+        for (auto& ghost : ghosts)
+            ghost->update(map);
 
         // --- Draw game elements here ---
         window.clear(sf::Color::Black);
@@ -47,10 +45,8 @@ void Game::run() {
         }
 
         pacman.draw(window);
-        redGhost.draw(window);
-        blueGhost.draw(window);
-        pinkGhost.draw(window);
-        orangeGhost.draw(window);
+        for (auto& ghost : ghosts)
+            ghost->draw(window);
 
         window.display();
     }
