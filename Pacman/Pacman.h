@@ -2,6 +2,7 @@
 #define PACMAN_H
 
 #include "Tile.h"
+#include "Ghost.h"
 #include "GameObject.h"
 
 class Pacman : public GameObject {
@@ -9,6 +10,7 @@ public:
     Pacman(std::vector<float> dimensions, std::vector<float> initPosition);
     void update(std::vector<std::vector<Tile>>* map) override;
     bool isPowerUpActive() const { return powerUpActive; }
+    void handleColitionWithGhosts(std::vector<Ghost*>* ghosts);
 
 private:
     bool powerUpActive = false;

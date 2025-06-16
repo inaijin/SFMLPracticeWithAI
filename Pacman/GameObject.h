@@ -13,6 +13,7 @@ public:
     void setPosition(const sf::Vector2f& newPosition);
     sf::Vector2f getNextPosition() const;
     const sf::RectangleShape& getShape() const;
+    void die();
 
     sf::Vector2f getLastDirection() const { return lastDirection; }
     float getSpeed() { return speed; }

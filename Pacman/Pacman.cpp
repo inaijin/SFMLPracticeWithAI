@@ -4,7 +4,7 @@
 
 Pacman::Pacman(std::vector<float> dimensions, std::vector<float> initPosition)
     : GameObject(dimensions, initPosition, 2.0f), powerUpActive(false),
-      powerUpDuration(sf::seconds(3.0f)) {
+      powerUpDuration(sf::seconds(5.0f)) {
     objectShape.setFillColor(sf::Color::Yellow);
 }
 
@@ -52,6 +52,22 @@ void Pacman::handleColitionWithPowerUp(std::vector<std::vector<Tile>>* map) {
                     powerUpActive = true;
                     powerUpClock.restart();
                 }
+            }
+        }
+    }
+}
+
+void Pacman::handleColitionWithGhosts(std::vector<Ghost*>* ghosts) {
+    sf::FloatRect pacmanBounds = getShape().getGlobalBounds();
+
+    for (auto& ghost : *ghosts) {
+        sf::FloatRect ghostBounds = ghost->getShape().getGlobalBounds();
+
+        if (pacmanBounds.findIntersection(ghostBounds)) {
+            if (powerUpActive) {
+                ghost->die();
+            } else {
+                die();
             }
         }
     }

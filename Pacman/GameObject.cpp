@@ -53,3 +53,7 @@ void GameObject::handleColition(std::vector<std::vector<Tile>> map) {
         setPosition(nextPosition);
     }
 }
+
+void GameObject::die() {
+    objectShape.setPosition({-100.f, -100.f});
+}

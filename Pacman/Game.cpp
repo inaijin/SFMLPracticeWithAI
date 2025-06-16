@@ -33,6 +33,7 @@ void Game::run() {
         // --- Update game logic here ---
 
         pacman.update(&map);
+        pacman.handleColitionWithGhosts(&ghosts);
         for (auto& ghost : ghosts)
             ghost->update(&map);
 
