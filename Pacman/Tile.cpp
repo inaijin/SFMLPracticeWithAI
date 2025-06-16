@@ -29,6 +29,11 @@ TileType Tile::getType() const {
     return type;
 }
 
+void Tile::removeTile() {
+    this->type = TileType::Empty;
+    tileShape.setFillColor(sf::Color::Transparent);
+}
+
 void Tile::draw(sf::RenderWindow& window) {
     window.draw(tileShape);
 }

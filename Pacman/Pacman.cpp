@@ -3,13 +3,22 @@
 #include "Pacman.h"
 
 Pacman::Pacman(std::vector<float> dimensions, std::vector<float> initPosition)
-    : GameObject(dimensions, initPosition, 2.0f) {
+    : GameObject(dimensions, initPosition, 2.0f), powerUpActive(false),
+      powerUpDuration(sf::seconds(3.0f)) {
     objectShape.setFillColor(sf::Color::Yellow);
 }
 
-void Pacman::update(std::vector<std::vector<Tile>> map) {
+void Pacman::update(std::vector<std::vector<Tile>>* map) {
     handleInput();
-    handleColition(map);
+    handleColitionWithPowerUp(map);
+    handleColition(*(map));
+
+    if (powerUpActive) {
+        if (powerUpClock.getElapsedTime() >= powerUpDuration) {
+            powerUpActive = false;
+            objectShape.setFillColor(sf::Color::Yellow);
+        }
+    }
 }
 
 void Pacman::handleInput() {
@@ -25,5 +34,25 @@ void Pacman::handleInput() {
 
     if (direction != sf::Vector2f(0, 0)) {
         lastDirection = direction;
+    }
+}
+
+void Pacman::handleColitionWithPowerUp(std::vector<std::vector<Tile>>* map) {
+    sf::Vector2f nextPosition = getNextPosition();
+    sf::Vector2f pacmanSize = getShape().getSize();
+    sf::FloatRect nextBounds(nextPosition, pacmanSize);
+
+    for (auto& row : *(map)) {
+        for (auto& tile : row) {
+            if (tile.getType() == TileType::PowerUp) {
+                const auto tileBounds = tile.getShape().getGlobalBounds();
+                if (nextBounds.findIntersection(tileBounds)) {
+                    tile.removeTile();
+                    objectShape.setFillColor(sf::Color::Blue);
+                    powerUpActive = true;
+                    powerUpClock.restart();
+                }
+            }
+        }
     }
 }

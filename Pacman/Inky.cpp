@@ -6,9 +6,9 @@ Inky::Inky(std::vector<float> dimensions, std::vector<float> initPosition, sf::C
     objectShape.setFillColor(color);
 }
 
-void Inky::update(std::vector<std::vector<Tile>> map) {
+void Inky::update(std::vector<std::vector<Tile>>* map) {
     move();
-    handleColition(map);
+    handleColition(*(map));
 }
 
 void Inky::move() {

@@ -10,7 +10,7 @@ GameObject::GameObject(std::vector<float> dimentions, std::vector<float> initPos
     objectShape.setPosition({initPosition[0], initPosition[1]});
 }
 
-void GameObject::update(std::vector<std::vector<Tile>> map) {}
+void GameObject::update(std::vector<std::vector<Tile>>* map) {}
 
 sf::Vector2f GameObject::getNextPosition() const {
     return objectShape.getPosition() + direction * speed;

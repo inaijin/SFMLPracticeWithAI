@@ -8,7 +8,7 @@
 class GameObject {
 public:
     GameObject(std::vector<float> dimensions, std::vector<float> initPosition, float speed);
-    void virtual update(std::vector<std::vector<Tile>> map);
+    void virtual update(std::vector<std::vector<Tile>>* map);
     void draw(sf::RenderWindow& window);
     void setPosition(const sf::Vector2f& newPosition);
     sf::Vector2f getNextPosition() const;

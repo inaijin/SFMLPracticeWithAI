@@ -6,9 +6,9 @@ Ghost::Ghost(std::vector<float> dimensions, std::vector<float> initPosition, sf:
     objectShape.setFillColor(color);
 }
 
-void Ghost::update(std::vector<std::vector<Tile>> map) {
+void Ghost::update(std::vector<std::vector<Tile>>* map) {
     move();
-    handleColition(map);
+    handleColition(*(map));
 }
 
 void Ghost::move() {

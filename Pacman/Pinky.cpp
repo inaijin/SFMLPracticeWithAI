@@ -6,9 +6,9 @@ Pinky::Pinky(std::vector<float> dimensions, std::vector<float> initPosition, sf:
     objectShape.setFillColor(color);
 }
 
-void Pinky::update(std::vector<std::vector<Tile>> map) {
+void Pinky::update(std::vector<std::vector<Tile>>* map) {
     move();
-    handleColition(map);
+    handleColition(*(map));
 }
 
 void Pinky::move() {

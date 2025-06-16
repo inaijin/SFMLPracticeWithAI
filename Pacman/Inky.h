@@ -7,7 +7,7 @@
 class Inky : public Ghost {
 public:
     Inky(std::vector<float> dimensions, std::vector<float> initPosition, sf::Color color);
-    void update(std::vector<std::vector<Tile>> map) override;
+    void update(std::vector<std::vector<Tile>>* map) override;
     void move() override;
 
 private:

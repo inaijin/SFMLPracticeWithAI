@@ -14,6 +14,7 @@ public:
     Tile();
     Tile(TileType type, float x, float y);
     TileType getType() const;
+    void removeTile();
     void draw(sf::RenderWindow& window);
     sf::RectangleShape getShape() const { return tileShape; }
 private:

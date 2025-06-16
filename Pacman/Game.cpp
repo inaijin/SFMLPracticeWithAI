@@ -32,9 +32,9 @@ void Game::run() {
 
         // --- Update game logic here ---
 
-        pacman.update(map);
+        pacman.update(&map);
         for (auto& ghost : ghosts)
-            ghost->update(map);
+            ghost->update(&map);
 
         // --- Draw game elements here ---
         window.clear(sf::Color::Black);

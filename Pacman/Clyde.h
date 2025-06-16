@@ -7,7 +7,7 @@
 class Clyde : public Ghost {
 public:
     Clyde(std::vector<float> dimensions, std::vector<float> initPosition, sf::Color color);
-    void update(std::vector<std::vector<Tile>> map) override;
+    void update(std::vector<std::vector<Tile>>* map) override;
     void move() override;
 
 private:

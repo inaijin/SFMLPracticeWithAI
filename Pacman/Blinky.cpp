@@ -6,9 +6,9 @@ Blinky::Blinky(std::vector<float> dimensions, std::vector<float> initPosition, s
     objectShape.setFillColor(color);
 }
 
-void Blinky::update(std::vector<std::vector<Tile>> map) {
+void Blinky::update(std::vector<std::vector<Tile>>* map) {
     move();
-    handleColition(map);
+    handleColition(*(map));
 }
 
 void Blinky::move() {
