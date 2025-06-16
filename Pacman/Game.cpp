@@ -67,13 +67,6 @@ void Game::loadMap() {
             float yPos = static_cast<float>(i * TILE_SIZE);
 
             map[i][j] = Tile(currentTileType, xPos, yPos);
-
-            // // Optional: Set initial positions for Pacman and Ghosts based on map
-            // if (currentTileType == TileType::PacManSpawn) {
-            //     pacman.setPosition({xPos + TILE_SIZE / 2.f, yPos + TILE_SIZE / 2.f});
-            // } else if (currentTileType == TileType::GhostSpawn) {
-            //     ghost.setPosition({xPos + TILE_SIZE / 2.f, yPos + TILE_SIZE / 2.f});
-            // }
         }
     }
 }

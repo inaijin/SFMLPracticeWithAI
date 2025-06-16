@@ -18,11 +18,9 @@ Tile::Tile(TileType type, float x, float y) : type(type) {
         case TileType::Empty:
             tileShape.setFillColor(sf::Color::Transparent);
             break;
-        case TileType::Pellet:
-            tileShape.setFillColor(sf::Color::White);
-            break;
         case TileType::PowerUp:
-            tileShape.setFillColor(sf::Color::Red);
+            tileShape.setFillColor(sf::Color::White);
+            tileShape.setSize({tile_diemensions[0] * 0.75f, tile_diemensions[1] * 0.75f});
             break;
     }
 }

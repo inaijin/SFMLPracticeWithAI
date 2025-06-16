@@ -6,7 +6,6 @@
 enum class TileType {
     Empty,
     Wall,
-    Pellet,
     PowerUp
 };
 
