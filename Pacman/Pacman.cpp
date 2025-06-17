@@ -204,3 +204,9 @@ bool Pacman::handlePelletAndPowerUpCollisions(std::vector<std::vector<Tile>>* ma
     }
     return false;
 }
+
+void Pacman::reset() {
+    this->powerUpActive = false;
+    this->objectShape.setFillColor(sf::Color::Yellow);
+    this->objectShape.setPosition({85, 100});
+}

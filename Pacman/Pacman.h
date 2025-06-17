@@ -16,6 +16,7 @@ public:
     bool handlePelletAndPowerUpCollisions(std::vector<std::vector<Tile>>* map);
     void setTrainingMode(bool is_training);
     std::unique_ptr<GhostAI>* getAI() { return &ai; }
+    void reset() override;
 
 private:
     bool powerUpActive = false;

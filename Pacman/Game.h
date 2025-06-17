@@ -29,13 +29,10 @@ public:
 private:
     GameState current_state;
     sf::Font font;
-    sf::Text train_button;
-    sf::Text play_button;
 
     void runMainMenu();
     void runGameSession();
 
-    void loadAssets();
     void resetGame();
     void saveAITables();
     void loadAITables();
@@ -46,6 +43,9 @@ private:
     Grid grid;
     std::vector<std::vector<Tile>> map;
     void loadMap();
+
+    sf::Text train_button;
+    sf::Text play_button;
 };
 
 #endif // GAME_H

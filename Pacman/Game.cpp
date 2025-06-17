@@ -6,6 +6,13 @@
 #include "Tile.h"
 #include "Constants.h"
 
+const std::vector<std::pair<int, int>> ghost_initial_positions = {
+        {245, 195},   // Blinky
+        {1333, 195},  // Pinky
+        {85, 905},    // Inky
+        {1500, 905}   // Clyde
+};
+
 Game::Game()
 : window(sf::VideoMode({SCREEN_WIDTH, SCREEN_HEIGHT}), "Pacman"),
 pacman(pacman_diemensions, {85, 100}), train_button(font), play_button(font) {
@@ -61,7 +68,7 @@ void Game::runGameSession() {
 
         // --- Update game logic here ---
 
-        pacman.update(&map);
+        pacman.updatePacman(ghosts, &map);
         pacman.handleColitionWithGhosts(&ghosts);
 
         Blinky* blinky_ptr = static_cast<Blinky*>(ghosts[0]);
@@ -157,3 +164,18 @@ void Game::loadAITables() {
     ghosts[2]->getAI()->get()->loadQTable("inky_q_table.txt");
     ghosts[3]->getAI()->get()->loadQTable("clyde_q_table.txt");
 }
+
+void Game::resetGame() {
+    pacman.reset();
+
+    for (size_t i = 0; i < ghosts.size(); ++i) {
+        if (i < ghost_initial_positions.size()) {
+            ghosts[i]->setPosition(sf::Vector2f(static_cast<float>(ghost_initial_positions[i].first),
+                                                static_cast<float>(ghost_initial_positions[i].second)));
+        }
+    }
+
+    loadMap();
+}
+
+void GameObject::reset() {}
