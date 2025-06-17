@@ -32,8 +32,11 @@ void Game::run() {
 
         pacman.update(&map);
         pacman.handleColitionWithGhosts(&ghosts);
+
+        Blinky* blinky_ptr = static_cast<Blinky*>(ghosts[0]);
+
         for (auto& ghost : ghosts)
-            ghost->update(&map);
+            ghost->updateGhostState(pacman, blinky_ptr, &map);
 
         // --- Draw game elements here ---
         window.clear(sf::Color::Black);
