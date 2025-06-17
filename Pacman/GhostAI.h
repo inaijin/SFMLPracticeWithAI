@@ -22,6 +22,9 @@ public:
 
     void updateQValue(const std::string& state, Action action, double reward, const std::string& next_state);
 
+    void saveQTable(const std::string& filename);
+    void loadQTable(const std::string& filename);
+
 private:
     // Example: "state_key" -> {Q_up, Q_down, Q_left, Q_right}
     std::map<std::string, std::vector<double>> q_table;

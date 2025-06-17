@@ -1,5 +1,7 @@
 #include <vector>
 #include <algorithm>
+#include <fstream>
+#include <sstream>
 
 #include "GhostAI.h"
 
@@ -40,4 +42,33 @@ void GhostAI::updateQValue(const std::string& state, Action action, double rewar
     double max_next_q = *std::max_element(next_q_values.begin(), next_q_values.end());
     double new_q_value = old_q_value + alpha * (reward + gamma * max_next_q - old_q_value);
     getQValues(state)[static_cast<int>(action)] = new_q_value;
+}
+
+void GhostAI::saveQTable(const std::string& filename) {
+    std::ofstream file(filename);
+    if (!file.is_open()) return; // Handle error
+
+    for (const auto& pair : q_table) {
+        // Write: state_key Q_up Q_down Q_left Q_right
+        file << pair.first << " ";
+        file << pair.second[0] << " " << pair.second[1] << " " << pair.second[2] << " " << pair.second[3] << "\n";
+    }
+}
+
+void GhostAI::loadQTable(const std::string& filename) {
+    std::ifstream file(filename);
+    if (!file.is_open()) return; // Handle error, maybe file doesn't exist yet
+
+    q_table.clear(); // Start with a fresh brain
+    std::string line;
+    while (std::getline(file, line)) {
+        std::stringstream ss(line);
+        std::string state_key;
+        ss >> state_key;
+        
+        std::vector<double> values(4);
+        ss >> values[0] >> values[1] >> values[2] >> values[3];
+        
+        q_table[state_key] = values;
+    }
 }

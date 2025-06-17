@@ -14,6 +14,12 @@
 #include "Clyde.h"
 #include "Pacman.h"
 
+enum class GameState {
+    MainMenu,
+    Training,
+    Play
+};
+
 class Game {
 public:
     Game();
@@ -21,6 +27,19 @@ public:
     void run();
 
 private:
+    GameState current_state;
+    sf::Font font;
+    sf::Text train_button;
+    sf::Text play_button;
+
+    void runMainMenu();
+    void runGameSession();
+
+    void loadAssets();
+    void resetGame();
+    void saveAITables();
+    void loadAITables();
+
     sf::RenderWindow window;
     Pacman pacman;
     std::vector<Ghost*> ghosts;

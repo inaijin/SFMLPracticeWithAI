@@ -12,6 +12,7 @@ class Ghost : public GameObject {
 public:
     Ghost(std::vector<float> dimensions, std::vector<float> initPosition, sf::Color color);
     void updateGhostState(const Pacman& pacman, const Blinky* blinky, std::vector<std::vector<Tile>>* map);
+    std::unique_ptr<GhostAI>* getAI() { return &ai; }
 
 protected:
     std::unique_ptr<GhostAI> ai;

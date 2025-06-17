@@ -1,4 +1,5 @@
 #include <optional>
+#include <iostream>
 
 #include "Map.h"
 #include "Game.h"
@@ -7,7 +8,23 @@
 
 Game::Game()
 : window(sf::VideoMode({SCREEN_WIDTH, SCREEN_HEIGHT}), "Pacman"),
-pacman(pacman_diemensions, {85, 100}) {
+pacman(pacman_diemensions, {85, 100}), train_button(font), play_button(font) {
+    if(!font.openFromFile("../TicTacToe/fonts/arial.ttf"))
+        std::cout << "Error loading font!" << std::endl;
+
+    current_state = GameState::MainMenu;
+
+    train_button.setFont(font);
+    train_button.setString("Train AI");
+    train_button.setCharacterSize(50);
+    train_button.setPosition({SCREEN_WIDTH / 2.f - 150.f, SCREEN_HEIGHT / 2.f - 100.f});
+
+    play_button.setFont(font);
+    play_button.setString("Play Game");
+    play_button.setCharacterSize(50);
+    play_button.setPosition({SCREEN_WIDTH / 2.f - 150.f, SCREEN_HEIGHT / 2.f + 50.f});
+
+    resetGame();
     window.setFramerateLimit(framePS);
     loadMap();
     ghosts.push_back(new Blinky(ghost_diemensions, {245, 195}, sf::Color::Red));
@@ -21,6 +38,20 @@ Game::~Game() {
 }
 
 void Game::run() {
+    while (window.isOpen()) {
+        switch(current_state) {
+            case GameState::MainMenu:
+                runMainMenu();
+                break;
+            case GameState::Training:
+            case GameState::Play:
+                runGameSession();
+                break;
+        }
+    }
+}
+
+void Game::runGameSession() {
     while (window.isOpen()) {
         while (auto event = window.pollEvent())
         {
@@ -54,6 +85,44 @@ void Game::run() {
     }
 }
 
+void Game::runMainMenu()
+{
+    while (true)
+    {
+        auto optEvent = window.pollEvent();
+        if (!optEvent) break;
+        const auto &event = *optEvent;
+
+        if (event.is<sf::Event::Closed>())
+            window.close();
+
+        else if (event.is<sf::Event::MouseButtonPressed>())
+        {
+            auto mb = event.getIf<sf::Event::MouseButtonPressed>();
+            sf::Vector2f mousePos = window.mapPixelToCoords({ mb->position.x, mb->position.y });
+
+            if (train_button.getGlobalBounds().contains(mousePos))
+            {
+                pacman.setTrainingMode(true);
+                current_state = GameState::Training;
+                resetGame();
+            }
+            else if (play_button.getGlobalBounds().contains(mousePos))
+            {
+                pacman.setTrainingMode(false);
+                loadAITables();
+                current_state = GameState::Play;
+                resetGame();
+            }
+        }
+    }
+
+    window.clear(sf::Color::Black);
+    window.draw(train_button);
+    window.draw(play_button);
+    window.display();
+}
+
 void Game::loadMap() {
     std::vector<std::vector<TileType>> tileTypeData = createTileMapFromStrings();
 
@@ -71,4 +140,20 @@ void Game::loadMap() {
             map[i][j] = Tile(currentTileType, xPos, yPos);
         }
     }
+}
+
+void Game::saveAITables() {
+    pacman.getAI()->get()->saveQTable("pacman_q_table.txt");
+    ghosts[0]->getAI()->get()->saveQTable("blinky_q_table.txt");
+    ghosts[1]->getAI()->get()->saveQTable("pinky_q_table.txt");
+    ghosts[2]->getAI()->get()->saveQTable("inky_q_table.txt");
+    ghosts[3]->getAI()->get()->saveQTable("clyde_q_table.txt");
+}
+
+void Game::loadAITables() {
+    pacman.getAI()->get()->loadQTable("pacman_q_table.txt");
+    ghosts[0]->getAI()->get()->loadQTable("blinky_q_table.txt");
+    ghosts[1]->getAI()->get()->loadQTable("pinky_q_table.txt");
+    ghosts[2]->getAI()->get()->loadQTable("inky_q_table.txt");
+    ghosts[3]->getAI()->get()->loadQTable("clyde_q_table.txt");
 }
