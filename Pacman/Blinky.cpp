@@ -7,10 +7,6 @@ Blinky::Blinky(std::vector<float> dimensions, std::vector<float> initPosition, s
     ai = std::make_unique<GhostAI>(0.1, 0.9, 0.1);
 }
 
-float distance(const sf::Vector2f& p1, const sf::Vector2f& p2) {
-    return std::sqrt(std::pow(p2.x - p1.x, 2) + std::pow(p2.y - p1.y, 2));
-}
-
 double Blinky::calculateReward(const sf::Vector2f& old_position, const Pacman& pacman, const Blinky* blinky) {
     sf::Vector2f pacman_pos = pacman.getShape().getPosition();
     sf::Vector2f new_position = getShape().getPosition();

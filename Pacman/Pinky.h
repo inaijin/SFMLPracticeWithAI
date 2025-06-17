@@ -2,16 +2,13 @@
 #define PINKY_H
 
 #include "Ghost.h"
-#include "GameObject.h"
 
 class Pinky : public Ghost {
 public:
     Pinky(std::vector<float> dimensions, std::vector<float> initPosition, sf::Color color);
-    void update(std::vector<std::vector<Tile>>* map) override;
-    void move() override;
 
 private:
-
+    double calculateReward(const sf::Vector2f& old_position, const Pacman& pacman, const Blinky* blinky) override;
 };
 
 #endif // PINKY_H

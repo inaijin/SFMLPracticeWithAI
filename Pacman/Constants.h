@@ -15,4 +15,6 @@ const std::vector<float> ghost_diemensions = {30, 30};
 const std::vector<float> pacman_diemensions = {30, 30};
 const std::vector<float> tile_diemensions = {30, 30};
 
+const float TILE_SIZE = 30.0f;
+
 #endif // CONSTANTS_H

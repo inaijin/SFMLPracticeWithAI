@@ -16,6 +16,7 @@ protected:
     std::unique_ptr<GhostAI> ai;
     virtual std::string createAIState(const Pacman& pacman) const;
     virtual double calculateReward(const sf::Vector2f& old_position, const Pacman& pacman, const Blinky* blinky) = 0;
+    float distance(const sf::Vector2f& p1, const sf::Vector2f& p2);
 
 };
 

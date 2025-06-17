@@ -1,7 +1,6 @@
 #include "Tile.h"
 #include "Ghost.h"
-
-const float TILE_SIZE = 30.0f;
+#include "Constants.h"
 
 Ghost::Ghost(std::vector<float> dimensions, std::vector<float> initPosition, sf::Color color)
     : GameObject(dimensions, initPosition, 1.5f) {
@@ -44,4 +43,8 @@ void Ghost::update(const Pacman& pacman, const Blinky* blinky, std::vector<std::
     double reward = calculateReward(old_position, pacman, blinky);
 
     ai->updateQValue(current_state, chosen_action, reward, next_state);
+}
+
+float distance(const sf::Vector2f& p1, const sf::Vector2f& p2) {
+    return std::sqrt(std::pow(p2.x - p1.x, 2) + std::pow(p2.y - p1.y, 2));
 }
