@@ -41,6 +41,10 @@ pacman(pacman_diemensions, {85, 100}), train_button(font), play_button(font) {
 }
 
 Game::~Game() {
+    if (training_session_ran) {
+        std::cout << "Training session ended. Saving AI tables..." << std::endl;
+        saveAITables();
+    }
     map.clear();
 }
 
@@ -59,36 +63,59 @@ void Game::run() {
 }
 
 void Game::runGameSession() {
+    int i = 0;
     while (window.isOpen()) {
+        i++;
+        std::cout << i << std::endl;
         while (auto event = window.pollEvent())
         {
-            if (event->is<sf::Event::Closed>())
+            if (event->is<sf::Event::Closed>()) {
+                if (current_state == GameState::Training) {
+                    saveAITables();
+                }
                 window.close();
+                return; 
+            }
+
+            if (event->is<sf::Event::KeyPressed>()) {
+                if (event->getIf<sf::Event::KeyPressed>()->code == sf::Keyboard::Key::F) {
+                    fast_forward_mode = !fast_forward_mode;
+
+                    if (fast_forward_mode) {
+                        window.setFramerateLimit(0);
+                        std::cout << "Fast-Forward Mode: ON" << std::endl;
+                    } else {
+                        window.setFramerateLimit(framePS);
+                        std::cout << "Fast-Forward Mode: OFF" << std::endl;
+                    }
+                }
+            }
         }
 
         // --- Update game logic here ---
-
-        pacman.updatePacman(ghosts, &map);
-        pacman.handleColitionWithGhosts(&ghosts);
+        if(pacman.updatePacman(ghosts, &map))
+            resetGame();
 
         Blinky* blinky_ptr = static_cast<Blinky*>(ghosts[0]);
 
         for (auto& ghost : ghosts)
             ghost->updateGhostState(pacman, blinky_ptr, &map);
 
-        // --- Draw game elements here ---
-        window.clear(sf::Color::Black);
+        // --- Draw game elements here if not fast forward---
+        if(!fast_forward_mode) {
+            window.clear(sf::Color::Black);
 
-        for (auto& row : map) {
-            for (auto& tile : row)
-                tile.draw(window);
+            for (auto& row : map) {
+                for (auto& tile : row)
+                    tile.draw(window);
+            }
+
+            pacman.draw(window);
+            for (auto& ghost : ghosts)
+                ghost->draw(window);
+
+            window.display();
         }
-
-        pacman.draw(window);
-        for (auto& ghost : ghosts)
-            ghost->draw(window);
-
-        window.display();
     }
 }
 
@@ -111,12 +138,15 @@ void Game::runMainMenu()
             if (train_button.getGlobalBounds().contains(mousePos))
             {
                 pacman.setTrainingMode(true);
+                training_session_ran = true;
+                loadAITables();
                 current_state = GameState::Training;
                 resetGame();
             }
             else if (play_button.getGlobalBounds().contains(mousePos))
             {
                 pacman.setTrainingMode(false);
+                training_session_ran = false;
                 loadAITables();
                 current_state = GameState::Play;
                 resetGame();
@@ -150,19 +180,19 @@ void Game::loadMap() {
 }
 
 void Game::saveAITables() {
-    pacman.getAI()->get()->saveQTable("pacman_q_table.txt");
-    ghosts[0]->getAI()->get()->saveQTable("blinky_q_table.txt");
-    ghosts[1]->getAI()->get()->saveQTable("pinky_q_table.txt");
-    ghosts[2]->getAI()->get()->saveQTable("inky_q_table.txt");
-    ghosts[3]->getAI()->get()->saveQTable("clyde_q_table.txt");
+    pacman.getAI()->get()->saveQTable("weights/pacman_q_table.txt");
+    ghosts[0]->getAI()->get()->saveQTable("weights/blinky_q_table.txt");
+    ghosts[1]->getAI()->get()->saveQTable("weights/pinky_q_table.txt");
+    ghosts[2]->getAI()->get()->saveQTable("weights/inky_q_table.txt");
+    ghosts[3]->getAI()->get()->saveQTable("weights/clyde_q_table.txt");
 }
 
 void Game::loadAITables() {
-    pacman.getAI()->get()->loadQTable("pacman_q_table.txt");
-    ghosts[0]->getAI()->get()->loadQTable("blinky_q_table.txt");
-    ghosts[1]->getAI()->get()->loadQTable("pinky_q_table.txt");
-    ghosts[2]->getAI()->get()->loadQTable("inky_q_table.txt");
-    ghosts[3]->getAI()->get()->loadQTable("clyde_q_table.txt");
+    pacman.getAI()->get()->loadQTable("weights/pacman_q_table.txt");
+    ghosts[0]->getAI()->get()->loadQTable("weights/blinky_q_table.txt");
+    ghosts[1]->getAI()->get()->loadQTable("weights/pinky_q_table.txt");
+    ghosts[2]->getAI()->get()->loadQTable("weights/inky_q_table.txt");
+    ghosts[3]->getAI()->get()->loadQTable("weights/clyde_q_table.txt");
 }
 
 void Game::resetGame() {

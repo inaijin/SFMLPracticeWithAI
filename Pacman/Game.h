@@ -46,6 +46,9 @@ private:
 
     sf::Text train_button;
     sf::Text play_button;
+
+    bool training_session_ran = false;
+    bool fast_forward_mode = false;
 };
 
 #endif // GAME_H

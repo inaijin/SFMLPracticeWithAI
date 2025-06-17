@@ -10,7 +10,7 @@ class Ghost;
 class Pacman : public GameObject {
 public:
     Pacman(std::vector<float> dimensions, std::vector<float> initPosition);
-    void updatePacman(const std::vector<Ghost*>& ghosts, std::vector<std::vector<Tile>>* map);
+    bool updatePacman(std::vector<Ghost*>& ghosts, std::vector<std::vector<Tile>>* map);
     bool isPowerUpActive() const { return powerUpActive; }
     void handleColitionWithGhosts(std::vector<Ghost*>* ghosts);
     bool handlePelletAndPowerUpCollisions(std::vector<std::vector<Tile>>* map);
@@ -29,7 +29,7 @@ private:
     void handleInput();
     void handleColitionWithPowerUp(std::vector<std::vector<Tile>>* map);
 
-    void updateAI(const std::vector<Ghost*>& ghosts, std::vector<std::vector<Tile>>* map);
+    bool updateAI(const std::vector<Ghost*>& ghosts, std::vector<std::vector<Tile>>* map);
     std::string createAIState(const std::vector<Ghost*>& ghosts, const std::vector<std::vector<Tile>>& map) const;
     double calculateReward(const sf::Vector2f& old_position, const std::vector<Ghost*>& ghosts, bool ate_power_up, bool ate_ghost, bool died) const;
     sf::Vector2f findClosestPellet(const std::vector<std::vector<Tile>>& map) const;

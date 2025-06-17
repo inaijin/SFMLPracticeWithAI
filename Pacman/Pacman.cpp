@@ -10,19 +10,24 @@ Pacman::Pacman(std::vector<float> dimensions, std::vector<float> initPosition)
     ai = std::make_unique<GhostAI>(0.1, 0.9, 0.1);
 }
 
-void Pacman::updatePacman(const std::vector<Ghost*>& ghosts, std::vector<std::vector<Tile>>* map) {
+bool Pacman::updatePacman(std::vector<Ghost*>& ghosts, std::vector<std::vector<Tile>>* map) {
+    bool shouldReset = false;
+
     if (is_training) {
-        updateAI(ghosts, map);
+        shouldReset = updateAI(ghosts, map);
     } else {
         handleInput();
         handleColitionWithPowerUp(map);
         handleColition(*map);
+        handleColitionWithGhosts(&ghosts);
     }
 
     if (powerUpActive && powerUpClock.getElapsedTime() >= powerUpDuration) {
         powerUpActive = false;
         objectShape.setFillColor(sf::Color::Yellow);
     }
+
+    return shouldReset;
 }
 
 void Pacman::handleInput() {
@@ -85,7 +90,7 @@ void Pacman::setTrainingMode(bool is_training) {
     this->is_training = is_training;
 }
 
-void Pacman::updateAI(const std::vector<Ghost*>& ghosts, std::vector<std::vector<Tile>>* map) {
+bool Pacman::updateAI(const std::vector<Ghost*>& ghosts, std::vector<std::vector<Tile>>* map) {
     sf::Vector2f old_pos = getShape().getPosition();
     std::string current_state = createAIState(ghosts, *map);
 
@@ -108,10 +113,8 @@ void Pacman::updateAI(const std::vector<Ghost*>& ghosts, std::vector<std::vector
         sf::FloatRect ghostBounds = ghost->getShape().getGlobalBounds();
         if (pacmanBounds.findIntersection(ghostBounds)) {
             if (powerUpActive) {
-                ghost->die();
                 ate_ghost = true;
             } else {
-                die();
                 died = true;
             }
         }
@@ -123,6 +126,8 @@ void Pacman::updateAI(const std::vector<Ghost*>& ghosts, std::vector<std::vector
     std::string next_state = createAIState(ghosts, *map);
     double reward = calculateReward(old_pos, ghosts, ate_power_up, ate_ghost, died);
     ai->updateQValue(current_state, chosen_action, reward, next_state);
+
+    return ate_ghost || died;
 }
 
 std::string Pacman::createAIState(const std::vector<Ghost*>& ghosts, const std::vector<std::vector<Tile>>& map) const {
