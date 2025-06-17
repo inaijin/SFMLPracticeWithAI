@@ -7,7 +7,7 @@
 
 // Screen dimensions
 const int SCREEN_WIDTH = 1600;
-const int SCREEN_HEIGHT = 1200;
+const int SCREEN_HEIGHT = 1000;
 const int framePS = 120;
 
 // Game Objets Diemnsions

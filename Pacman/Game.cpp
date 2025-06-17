@@ -5,8 +5,6 @@
 #include "Tile.h"
 #include "Constants.h"
 
-const float TILE_SIZE = 30.0f;
-
 Game::Game()
 : window(sf::VideoMode({SCREEN_WIDTH, SCREEN_HEIGHT}), "Pacman"),
 pacman(pacman_diemensions, {85, 100}) {

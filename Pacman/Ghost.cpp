@@ -19,7 +19,7 @@ std::string Ghost::createAIState(const Pacman& pacman) const {
            "_" + std::to_string(pacman_tile_x) + "_" + std::to_string(pacman_tile_y);
 }
 
-void Ghost::update(const Pacman& pacman, const Blinky* blinky, std::vector<std::vector<Tile>>* map) {
+void Ghost::updateGhostState(const Pacman& pacman, const Blinky* blinky, std::vector<std::vector<Tile>>* map) {
     sf::Vector2f old_position = getShape().getPosition();
     std::string current_state = createAIState(pacman);
 
@@ -45,6 +45,6 @@ void Ghost::update(const Pacman& pacman, const Blinky* blinky, std::vector<std::
     ai->updateQValue(current_state, chosen_action, reward, next_state);
 }
 
-float distance(const sf::Vector2f& p1, const sf::Vector2f& p2) {
+float Ghost::distance(const sf::Vector2f& p1, const sf::Vector2f& p2) {
     return std::sqrt(std::pow(p2.x - p1.x, 2) + std::pow(p2.y - p1.y, 2));
 }

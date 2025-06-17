@@ -3,6 +3,7 @@
 
 #include "GhostAI.h"
 #include "Pacman.h"
+class Pacman;
 #include "GameObject.h"
 
 class Blinky;
@@ -10,7 +11,7 @@ class Blinky;
 class Ghost : public GameObject {
 public:
     Ghost(std::vector<float> dimensions, std::vector<float> initPosition, sf::Color color);
-    void update(const Pacman& pacman, const Blinky* blinky, std::vector<std::vector<Tile>>* map);
+    void updateGhostState(const Pacman& pacman, const Blinky* blinky, std::vector<std::vector<Tile>>* map);
 
 protected:
     std::unique_ptr<GhostAI> ai;

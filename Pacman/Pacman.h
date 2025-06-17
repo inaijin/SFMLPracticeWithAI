@@ -3,6 +3,7 @@
 
 #include "Tile.h"
 #include "Ghost.h"
+class Ghost;
 #include "GameObject.h"
 
 class Pacman : public GameObject {
