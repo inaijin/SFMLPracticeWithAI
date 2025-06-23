@@ -17,11 +17,13 @@ public:
     void setTrainingMode(bool is_training);
     std::unique_ptr<GhostAI>* getAI() { return &ai; }
     void reset() override;
+    void increamentGhostsKilled() { howManyGhostsKilled++; }
 
 private:
     bool powerUpActive = false;
     std::unique_ptr<GhostAI> ai;
     bool is_training = false;
+    int howManyGhostsKilled = 0;
 
     sf::Clock powerUpClock;
     sf::Time powerUpDuration;

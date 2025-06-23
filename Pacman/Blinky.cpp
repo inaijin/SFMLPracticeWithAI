@@ -17,6 +17,6 @@ double Blinky::calculateReward(const sf::Vector2f& old_position, const Pacman& p
     if (new_dist < old_dist) {
         return 1.0;
     } else {
-        return -1.0;
+        return -2.0;
     }
 }

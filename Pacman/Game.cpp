@@ -7,15 +7,15 @@
 #include "Constants.h"
 
 const std::vector<std::pair<int, int>> ghost_initial_positions = {
-        {245, 195},   // Blinky
-        {1333, 195},  // Pinky
-        {85, 905},    // Inky
-        {1500, 905}   // Clyde
+        {245, 444},   // Blinky
+        {1333, 444},  // Pinky
+        {245, 555},    // Inky
+        {1333, 555}   // Clyde
 };
 
 Game::Game()
 : window(sf::VideoMode({SCREEN_WIDTH, SCREEN_HEIGHT}), "Pacman"),
-pacman(pacman_diemensions, {85, 100}), train_button(font), play_button(font) {
+pacman(pacman_diemensions, {800, 800}), train_button(font), play_button(font) {
     if(!font.openFromFile("../TicTacToe/fonts/arial.ttf"))
         std::cout << "Error loading font!" << std::endl;
 
@@ -34,10 +34,10 @@ pacman(pacman_diemensions, {85, 100}), train_button(font), play_button(font) {
     resetGame();
     window.setFramerateLimit(framePS);
     loadMap();
-    ghosts.push_back(new Blinky(ghost_diemensions, {245, 195}, sf::Color::Red));
-    ghosts.push_back(new Pinky(ghost_diemensions, {1333, 195}, sf::Color::Magenta));
-    ghosts.push_back(new Inky(ghost_diemensions, {85, 905}, sf::Color::Cyan));
-    ghosts.push_back(new Clyde(ghost_diemensions, {1500, 905}, sf::Color(255, 165, 0)));
+    ghosts.push_back(new Blinky(ghost_diemensions, {245, 444}, sf::Color::Red));
+    ghosts.push_back(new Pinky(ghost_diemensions, {1333, 444}, sf::Color::Magenta));
+    ghosts.push_back(new Inky(ghost_diemensions, {245, 555}, sf::Color::Cyan));
+    ghosts.push_back(new Clyde(ghost_diemensions, {1333, 555}, sf::Color(255, 165, 0)));
 }
 
 Game::~Game() {
@@ -63,10 +63,7 @@ void Game::run() {
 }
 
 void Game::runGameSession() {
-    int i = 0;
     while (window.isOpen()) {
-        i++;
-        std::cout << i << std::endl;
         while (auto event = window.pollEvent())
         {
             if (event->is<sf::Event::Closed>()) {

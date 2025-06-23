@@ -105,7 +105,8 @@ bool Pacman::updateAI(const std::vector<Ghost*>& ghosts, std::vector<std::vector
     }
 
     bool ate_power_up = handlePelletAndPowerUpCollisions(map);
-    bool ate_ghost = false;
+    bool killedSingleGhost = false;
+    bool ate_all_ghost = false;
     bool died = false;
 
     sf::FloatRect pacmanBounds = getShape().getGlobalBounds();
@@ -113,21 +114,26 @@ bool Pacman::updateAI(const std::vector<Ghost*>& ghosts, std::vector<std::vector
         sf::FloatRect ghostBounds = ghost->getShape().getGlobalBounds();
         if (pacmanBounds.findIntersection(ghostBounds)) {
             if (powerUpActive) {
-                ate_ghost = true;
+                ghost->die();
+                killedSingleGhost = true;
+                increamentGhostsKilled();
             } else {
                 died = true;
             }
         }
     }
 
+    if (howManyGhostsKilled == 4)
+        ate_all_ghost = true;
+
     handleColition(*map);
     if (direction != sf::Vector2f(0, 0)) lastDirection = direction;
 
     std::string next_state = createAIState(ghosts, *map);
-    double reward = calculateReward(old_pos, ghosts, ate_power_up, ate_ghost, died);
+    double reward = calculateReward(old_pos, ghosts, ate_power_up, killedSingleGhost, died);
     ai->updateQValue(current_state, chosen_action, reward, next_state);
 
-    return ate_ghost || died;
+    return ate_all_ghost || died;
 }
 
 std::string Pacman::createAIState(const std::vector<Ghost*>& ghosts, const std::vector<std::vector<Tile>>& map) const {
@@ -177,14 +183,28 @@ double Pacman::calculateReward(const sf::Vector2f& old_position, const std::vect
     sf::Vector2f pacman_pos = getShape().getPosition();
     float min_dist_to_ghost = std::numeric_limits<float>::max();
     float old_min_dist_to_ghost = std::numeric_limits<float>::max();
+    float old_dist_to_pallet = std::numeric_limits<float>::max();
+    float dist_to_pallet = std::numeric_limits<float>::max();
 
     for (const auto& ghost : ghosts) {
         min_dist_to_ghost = std::min(min_dist_to_ghost, distance(pacman_pos, ghost->getShape().getPosition()));
         old_min_dist_to_ghost = std::min(old_min_dist_to_ghost, distance(old_position, ghost->getShape().getPosition()));
     }
 
+    std::vector<sf::Vector2f> pallets;
+    pallets.push_back({1180, 955});
+    pallets.push_back({366, 955});
+
+    for (int i = 0; i < 2; i++) {
+        dist_to_pallet = std::min(dist_to_pallet, distance(pacman_pos, pallets[i]));
+        old_dist_to_pallet = std::min(old_dist_to_pallet, distance(old_position, pallets[i]));
+    }
+
     if (min_dist_to_ghost > old_min_dist_to_ghost) reward += 1.0;
     else reward -= 1.5;
+
+    if (dist_to_pallet > old_dist_to_pallet) reward += 0.5;
+    else reward -= 0.75;
 
     reward -= 0.1;
 
@@ -213,5 +233,5 @@ bool Pacman::handlePelletAndPowerUpCollisions(std::vector<std::vector<Tile>>* ma
 void Pacman::reset() {
     this->powerUpActive = false;
     this->objectShape.setFillColor(sf::Color::Yellow);
-    this->objectShape.setPosition({85, 100});
+    this->objectShape.setPosition({800, 800});
 }
